@@ -1,6 +1,7 @@
 ﻿using Exam2.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Exam2.Controllers
 {
@@ -46,14 +47,15 @@ namespace Exam2.Controllers
             {
                 return BadRequest("không tìm người này ");
             }
-            _examContext.Projects.Remove(pr);
+            _examContext.Employees.Remove(pr);
             return Ok("xóa thành công ");
         }
         [Route("GetDetail")]
         [HttpGet]
         public async Task<IActionResult> GetDetail(int id)
         {
-            var employ = _examContext.Employees.FirstOrDefault(o => o.EmployeeId == id);
+            var employ = _examContext.ProjectEmployees.Include(i=> i.Projectid).FirstOrDefaultAsync(i=> i.EmployeeId==id);
+            return Ok(employ);
         }
     }
 }
