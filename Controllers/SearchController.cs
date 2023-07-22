@@ -30,10 +30,6 @@ namespace Exam2.Controllers
         [HttpGet]
         public async Task<IActionResult> ProjectFnish()
         {
-            if (string.IsNullOrEmpty(keyword))
-            {
-                return BadRequest("Keyword is required.");
-            }
             var result = _examContextsearch.Projects.Where(item=> item.ProjectEndDate<= DateTime.Now);
             return Ok(result);
         }
