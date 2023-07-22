@@ -46,7 +46,6 @@ namespace Exam2.Controllers
             var result = _examContextsearch.Employees.Where(p => p.EmployeeName.ToLower().Contains(keyword.ToLower())).ToList();
             return Ok(result);
         }
-        // show all employ in project
 
         [Route("ShowAemPloypr")]
         [HttpGet]
