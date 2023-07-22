@@ -9,11 +9,12 @@ namespace Exam2.Controllers
     public class SearchController : ControllerBase
     {
 
-        private readonly ExamContext _examContext;
+        private readonly ExamContext _examContextsearch;
         public SearchController(ExamContext examContext)
         {
-            _examContext = examContext;
+            _examContextsearch = examContext;
         }
+        [Route("SearchProject")]
         [HttpGet]
         public async Task<IActionResult> SearchProject(string keyword)
         {
@@ -21,7 +22,31 @@ namespace Exam2.Controllers
             {
                 return BadRequest("Keyword is required.");
             }
-            var result = _examContext.Projects.Where(p=> p.ProjectName.ToLower().Contains (keyword.ToLower())).ToList();
+            var result = _examContextsearch.Projects.Where(p=> p.ProjectName.ToLower().Contains (keyword.ToLower())).ToList();
+            return Ok(result);
+        }
+
+        [Route("SearchPrFinish")]
+        [HttpGet]
+        public async Task<IActionResult> ProjectFnish()
+        {
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return BadRequest("Keyword is required.");
+            }
+            var result = _examContextsearch.Projects.Where(item=> item.ProjectEndDate<= DateTime.Now);
+            return Ok(result);
+        }
+
+        [Route("SearchEmploy")]
+        [HttpGet]
+        public async Task<IActionResult> SearchEmploy(string keyword)
+        {
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return BadRequest("Keyword is required.");
+            }
+            var result = _examContextsearch.Employees.Where(p => p.EmployeeName.ToLower().Contains(keyword.ToLower())).ToList();
             return Ok(result);
         }
 

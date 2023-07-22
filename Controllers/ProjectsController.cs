@@ -8,18 +8,21 @@ namespace Exam2.Controllers
     [ApiController]
     public class ProjectsController : ControllerBase
     {
-        private readonly ExamContext _examContext;
+        private readonly ExamContext _ContextPr;
         public ProjectsController(ExamContext examContext)
         {
-            _examContext = examContext;
+            _ContextPr = examContext;
         }
+        [Route("GetProject")]
         [HttpGet]
         public async Task<IActionResult> GetListPr()
         {
-            var project = _examContext.Projects.ToList();
+            var project = _ContextPr.Projects.ToList();
             return Ok(project);
         }
 
+
+        [Route("AddNewpr")]
         [HttpPost]
         public async Task<IActionResult> Addnewpr(Project pr)
         {
@@ -27,30 +30,33 @@ namespace Exam2.Controllers
             {
                 return BadRequest("nhập sai tham số");
             }
-            _examContext.AddAsync(pr);
-            _examContext.SaveChanges();
+            _ContextPr.AddAsync(pr);
+            _ContextPr.SaveChanges();
             return Ok("thêm thành công ");
         }
-        [HttpPost]
+
+        [Route("UpdatePr")]
+        [HttpPut]
         public async Task<IActionResult> UpdatePr(Project pr)
         {
             if (pr.ProjectStartDate > pr.ProjectEndDate)
             {
                 return BadRequest("nhập sai tham số");
             }
-            _examContext.Update(pr);
-            _examContext.SaveChanges();
+            _ContextPr.Update(pr);
+            _ContextPr.SaveChanges();
             return Ok("Update thành công ");
         }
+        [Route("DeletePr")]
         [HttpDelete]
         public async Task<IActionResult> Deletepr(int id)
         {
-            var pr = _examContext.Projects.FirstOrDefault(o => o.Projectid == id);
+            var pr = _ContextPr.Projects.FirstOrDefault(o => o.Projectid == id);
             if(pr == null)
             {
                 return BadRequest("không tìm thấy bài này ");
             }
-            _examContext.Projects.Remove(pr);
+            _ContextPr.Projects.Remove(pr);
             return Ok("xóa thành công ");
         }
     }

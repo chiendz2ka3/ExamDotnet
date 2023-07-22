@@ -32,13 +32,15 @@ namespace Exam2.Controllers
             _examContext.SaveChanges();
             return Ok("thêm thành công ");
         }
-        [HttpPost]
+        [Route("UpdateEm")]
+        [HttpPut]
         public async Task<IActionResult> UpdatePr(Employee pr)
         {
             _examContext.Employees.Update(pr);
             _examContext.SaveChanges();
             return Ok("Update thành công ");
         }
+        [Route("DeleteEm")]
         [HttpDelete]
         public async Task<IActionResult> Deletepr(int id)
         {
@@ -55,6 +57,10 @@ namespace Exam2.Controllers
         public async Task<IActionResult> GetDetail(int id)
         {
             var employ = _examContext.ProjectEmployees.Include(i=> i.Projectid).FirstOrDefaultAsync(i=> i.EmployeeId==id);
+            if(employ == null)
+            {
+                return NotFound("NotFound");
+            }
             return Ok(employ);
         }
     }
