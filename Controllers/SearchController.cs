@@ -1,6 +1,7 @@
 ﻿using Exam2.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Exam2.Controllers
 {
@@ -45,6 +46,18 @@ namespace Exam2.Controllers
             var result = _examContextsearch.Employees.Where(p => p.EmployeeName.ToLower().Contains(keyword.ToLower())).ToList();
             return Ok(result);
         }
+        // show all employ in project
 
+        [Route("ShowAemPloypr")]
+        [HttpGet]
+        public async Task<IActionResult> ShowAemPloypr(int id)
+        {
+            var result = _examContextsearch.ProjectEmployees.Include(i => i.EmployeeId).FirstOrDefaultAsync(i => i.Projectid == id);
+            if (result == null)
+            {
+                return BadRequest("Không tìm thấy kết quả ");
+            }
+            return Ok(result);
+        }
     }
 }
